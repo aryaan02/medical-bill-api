@@ -107,10 +107,13 @@ app.post("/items", (req, res) => {
       .send("Invalid street format. Please use 123 Main St");
   }
 
-  // Check the format of the city
-  if (!newBill.patientAddress.city.match(/^[a-zA-Z]+$/)) {
-    return res.status(400).send("Invalid city format");
-  }
+  // Format the city to be titlecase
+  newBill.patientAddress.city = newBill.patientAddress.city.replace(
+    /\w\S*/g,
+    function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }
+  );
 
   // Check the format of the state
   if (!newBill.patientAddress.state.match(/^[A-Z]{2}$/)) {
